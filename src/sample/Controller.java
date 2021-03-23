@@ -5,8 +5,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
-
+import mock.FlightSearchMock;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -20,6 +21,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addNums();
+        FlightSearchMock m = new FlightSearchMock("a", "b", new Date(System.currentTimeMillis()), 5);
     }
 
     public void addNums(){
