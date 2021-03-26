@@ -21,7 +21,7 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addNums();
-        FlightSearchMock m = new FlightSearchMock("a", "b", new Date(System.currentTimeMillis()), 5);
+        FlightSearchMock m = new FlightSearchMock("a", "b", "21/3/2022", 5);
     }
 
     public void addNums(){

@@ -44,19 +44,19 @@ public class TestFlightSearch {
     @Test
     public void testFlight6(){
         // Hér er verið að leita af með dagsetningu sem er nú þegar liðin. Sem ætti að skila villu.
-        assertEquals(expectedResultFlights5,fSearch1.flightSearch("Reykjavík", "Akureyri","24/7/2020", 5));
+        assertEquals(expectedResultFlights4,fSearch1.flightSearch("Reykjavík", "Akureyri","24/7/2020", 5));
     }
 
     @Test
     public void testFlight7(){
         // Hér er verið að leita af flugi með innsláttarvillu. Sem ætti að skila villu.
-        assertEquals(expectedResultFlights5,fSearch1.flightSearch("Reykjavík", "Agureyri","24/7/2021", 1));
+        assertEquals(expectedResultFlights4,fSearch1.flightSearch("Reykjavík", "Agureyri","24/7/2021", 1));
     }
 
     @Test
     public void testFlight8(){
         // Hér er verið að leita af með dagsetningu sem er nú þegar liðin. Sem ætti að skila villu.
-        assertEquals(expectedResultFlights5,fSearch1.flightSearch("Reykjavík", "Akureyri","24/7/2020", 5));
+        assertEquals(expectedResultFlights4,fSearch1.flightSearch("Reykjavík", "Akureyri","24/7/2020", 5));
     }
 
 }
