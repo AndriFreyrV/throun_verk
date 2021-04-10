@@ -3,20 +3,62 @@ package sample;
 import mock.FlightSearchMock;
 
 public class CombinedSearch {
+    private boolean findFlight;
+    private boolean findHotel;
+    private boolean findDayTour;
+    private boolean findRoundTripFlight;
+    private String from;
+    private String to;
+    private String dateFrom;
+    private String dateTo = ""; // for one way flight or only searching day tour we dont need day
+    private int nPersons;
 
 
-    public String[] CombinedSearch(boolean findFlight, boolean findHotel, boolean findDayTour, boolean findRoundTripFlight, String from, String to, String d, int n){
-        String[] Flights;
-        String[] Villa = {"EKKERT"};
-        if (findFlight == true) {
-           Flights = getFlightSearch(from, to, d, n);
-            return Flights;
-        }
-        return Villa;
+    public boolean isFindRoundTripFlight() {
+        return findRoundTripFlight;
+    }
+
+    public CombinedSearch(boolean fF, boolean fH, boolean fD, boolean fRT, String f, String t,
+                          String dF, String dT, int n){
+        this.findFlight = fF;
+        this.findHotel = fH;
+        this.findDayTour = fD;
+        this.findRoundTripFlight = fRT;
+        this.from = f;
+        this.to = t;
+        this.dateFrom = dF;
+        this.dateTo = dT;
+        this.nPersons = n;
+    }
+
+    public boolean isFindFlight() {
+        return findFlight;
     }
 
 
-    private String[] getFlightSearch(String from, String to, String d, int n){
+
+    // verður skipt út fyrir proper klasa
+    // one way flight search
+    public FlightSearchMock flightSearch(){
+        return new FlightSearchMock(this.from, this.to, this.dateFrom, this.nPersons);
+    }
+
+    // hér er round trip, búum til tvo instance af flightSearch
+    public FlightSearchRound flightSearchRound(){
+        FlightSearchMock f1 = new FlightSearchMock(this.from, this.to, this.dateFrom, this.nPersons);
+        FlightSearchMock f2 = new FlightSearchMock(this.to, this.from, this.dateTo, this.nPersons);
+        return new FlightSearchRound(f1, f2);
+    }
+
+    public String toString() {
+        // núna bara notað fyrir staðfestingu á að hlutur sé til
+        return "blaaa";
+    }
+
+
+
+
+    private String[] getFlightSearch(String from, String to, String d,String f, int n){
         FlightSearch fSearch = new FlightSearch();
         String[] FlightA;
         FlightA = fSearch.flightSearch(from,to,d,n);

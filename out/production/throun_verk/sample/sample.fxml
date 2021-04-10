@@ -3,21 +3,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.MainController">
    <children>
-      <TextField layoutX="66.0" layoutY="75.0" promptText="LocationFrom" />
-      <TextField layoutX="255.0" layoutY="75.0" promptText="LocationTo" />
-      <DatePicker layoutX="66.0" layoutY="140.0" prefHeight="25.0" prefWidth="149.0" promptText="DateFrom" />
-      <DatePicker layoutX="255.0" layoutY="140.0" prefHeight="25.0" prefWidth="163.0" promptText="DateTo" />
+      <TextField fx:id="locationFrom" layoutX="66.0" layoutY="75.0" promptText="LocationFrom" />
+      <TextField fx:id="locationTo" layoutX="255.0" layoutY="75.0" promptText="LocationTo" />
+      <DatePicker fx:id="dateFrom" layoutX="66.0" layoutY="140.0" prefHeight="25.0" prefWidth="149.0" promptText="DateFrom" />
+      <DatePicker fx:id="dateTo" layoutX="255.0" layoutY="140.0" prefHeight="25.0" prefWidth="163.0" promptText="DateTo" />
       <ComboBox fx:id="howMany" layoutX="66.0" layoutY="203.0" prefWidth="150.0" />
-      <RadioButton layoutX="263.0" layoutY="230.0" mnemonicParsing="false" text="Flight">
+      <RadioButton fx:id="flightRadio" layoutX="263.0" layoutY="230.0" mnemonicParsing="false" text="Flight">
          <toggleGroup>
-            <ToggleGroup fx:id="flights_group" />
+            <ToggleGroup fx:id="flightsGroup" />
          </toggleGroup></RadioButton>
-      <RadioButton layoutX="337.0" layoutY="230.0" mnemonicParsing="false" text="Round Trip" toggleGroup="$flights_group" />
-      <RadioButton layoutX="263.0" layoutY="267.0" mnemonicParsing="false" text="Hotel" />
-      <RadioButton layoutX="337.0" layoutY="267.0" mnemonicParsing="false" text="Day Trip" />
+      <RadioButton fx:id="roundTripRadio" layoutX="337.0" layoutY="230.0" mnemonicParsing="false" text="Round Trip" toggleGroup="$flightsGroup" />
+      <RadioButton fx:id="hotelRadio" layoutX="263.0" layoutY="267.0" mnemonicParsing="false" text="Hotel" />
+      <RadioButton fx:id="dayTripRadio" layoutX="337.0" layoutY="267.0" mnemonicParsing="false" text="Day Trip" />
       <Label layoutX="255.0" layoutY="199.0" prefHeight="25.0" prefWidth="163.0" text="Search for:" />
-      <Button layoutX="66.0" layoutY="313.0" mnemonicParsing="false" text="Submit" />
+      <Button fx:id="submitButton" layoutX="66.0" layoutY="313.0" mnemonicParsing="false" onAction="#searchAction" text="Submit" />
    </children>
 </AnchorPane>
