@@ -4,10 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import mock.FlightMock;
 import mock.FlightSearchMock;
+
+import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,6 +43,7 @@ public class MainController implements Initializable {
     private RadioButton roundTripRadio;
     @FXML
     private Button submitButton;
+
 
     private final Integer[] num_vals = {1,2,3,4,5,6,7,8,9,10};
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="500.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.bookingController">
+   <children>
+      <HBox layoutX="43.0" layoutY="34.0" prefHeight="414.0" prefWidth="717.0">
+         <children>
+            <VBox prefHeight="414.0" prefWidth="290.0">
+               <children>
+                  <ListView fx:id="flightsList" prefHeight="171.0" prefWidth="290.0" />
+                  <Button fx:id="OrderFlightBtn" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#selectFlightAction" prefHeight="16.0" prefWidth="85.0" text="Velja flug">
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+               </children></VBox>
+            <VBox prefHeight="200.0" prefWidth="431.0">
+               <children>
+                  <Pane prefHeight="248.0" prefWidth="429.0" />
+                  <Pane prefHeight="274.0" prefWidth="429.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="27.0" layoutY="14.0" prefHeight="17.0" prefWidth="77.0" text="Karfa" />
+                        <ListView fx:id="cartList" layoutX="18.0" layoutY="42.0" prefHeight="178.0" prefWidth="172.0" />
+                        <Button fx:id="orderBtn" layoutX="233.0" layoutY="145.0" mnemonicParsing="false" onAction="#orderFlightsAction" text="Order" />
+                        <Button fx:id="RemoveBtn" layoutX="306.0" layoutY="145.0" mnemonicParsing="false" onAction="#removeFlightAction" text="Remove" />
+                     </children>
+                  </Pane>
+               </children></VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

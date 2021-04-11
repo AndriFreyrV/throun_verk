@@ -14,6 +14,14 @@ public class FlightMock {
         this.availability = n;
     }
 
+    /**
+     * book flight for n persons
+     * @param n
+     */
+    public void book(int n){
+        this.availability-=n;
+    }
+
     public int getAvailability() {
         return this.availability;
     }
