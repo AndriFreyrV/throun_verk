@@ -9,7 +9,7 @@
       <TextField fx:id="locationTo" layoutX="255.0" layoutY="75.0" promptText="LocationTo" />
       <DatePicker fx:id="dateFrom" layoutX="66.0" layoutY="140.0" prefHeight="25.0" prefWidth="149.0" promptText="DateFrom" />
       <DatePicker fx:id="dateTo" layoutX="255.0" layoutY="140.0" prefHeight="25.0" prefWidth="163.0" promptText="DateTo" />
-      <ComboBox fx:id="howMany" layoutX="66.0" layoutY="203.0" prefWidth="150.0" />
+      <ComboBox fx:id="howMany" layoutX="66.0" layoutY="203.0" prefHeight="25.0" prefWidth="163.0" promptText="Number of Passengers" />
       <RadioButton fx:id="flightRadio" layoutX="263.0" layoutY="230.0" mnemonicParsing="false" text="Flight">
          <toggleGroup>
             <ToggleGroup fx:id="flightsGroup" />
