@@ -19,5 +19,6 @@
       <RadioButton fx:id="dayTripRadio" layoutX="337.0" layoutY="267.0" mnemonicParsing="false" text="Day Trip" />
       <Label layoutX="255.0" layoutY="199.0" prefHeight="25.0" prefWidth="163.0" text="Search for:" />
       <Button fx:id="submitButton" layoutX="66.0" layoutY="313.0" mnemonicParsing="false" onAction="#searchAction" text="Submit" />
+      <Label fx:id="errorLabel" layoutX="66.0" layoutY="357.0" prefHeight="62.0" prefWidth="532.0" />
    </children>
 </AnchorPane>

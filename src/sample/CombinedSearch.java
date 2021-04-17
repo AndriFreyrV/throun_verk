@@ -10,24 +10,30 @@ public class CombinedSearch {
     private String from;
     private String to;
     private String dateFrom;
-    private String dateTo = ""; // for one way flight or only searching day tour we dont need day
+    private String dateTo; // for one way flight or only searching day tour we dont need day
     private int nPersons;
 
+
+    public void setDateFrom(String dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public void setDateTo(String dateTo) {
+        this.dateTo = dateTo;
+    }
 
     public boolean isFindRoundTripFlight() {
         return findRoundTripFlight;
     }
 
     public CombinedSearch(boolean fF, boolean fH, boolean fD, boolean fRT, String f, String t,
-                          String dF, String dT, int n){
+                          int n){
         this.findFlight = fF;
         this.findHotel = fH;
         this.findDayTour = fD;
         this.findRoundTripFlight = fRT;
         this.from = f;
         this.to = t;
-        this.dateFrom = dF;
-        this.dateTo = dT;
         this.nPersons = n;
     }
 
@@ -53,16 +59,6 @@ public class CombinedSearch {
     public String toString() {
         // núna bara notað fyrir staðfestingu á að hlutur sé til
         return "blaaa";
-    }
-
-
-
-
-    private String[] getFlightSearch(String from, String to, String d,String f, int n){
-        FlightSearch fSearch = new FlightSearch();
-        String[] FlightA;
-        FlightA = fSearch.flightSearch(from,to,d,n);
-        return FlightA;
     }
 
 

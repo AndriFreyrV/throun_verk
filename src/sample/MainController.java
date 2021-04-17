@@ -12,9 +12,11 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import mock.FlightMock;
 import mock.FlightSearchMock;
+import mock.HotelMock;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,14 +45,18 @@ public class MainController implements Initializable {
     private RadioButton roundTripRadio;
     @FXML
     private Button submitButton;
+    @FXML
+    private Label errorLabel;
 
 
     private final Integer[] num_vals = {1,2,3,4,5,6,7,8,9,10};
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         addNums();
-        // FlightSearchMock m = new FlightSearchMock("a", "b", "21/3/2022", 5);
+
+        /*
         submitButton.disableProperty()
                 .bind(locationFrom.textProperty().isEmpty().
                         or(dateFrom.valueProperty().isNull())
@@ -58,6 +64,29 @@ public class MainController implements Initializable {
                 .or((flightsGroup.selectedToggleProperty().isNull())
                     .and(hotelRadio.selectedProperty().not()
                     .and(dayTripRadio.selectedProperty().not()))));
+
+         */
+        submitButton.disableProperty()
+                .bind(howMany.valueProperty().isNull().or(
+                        (flightsGroup.selectedToggleProperty().isNull())
+                                .and(hotelRadio.selectedProperty().not()
+                                        .and(dayTripRadio.selectedProperty().not()))
+                ));
+
+
+
+        // have to select dataFrom to select DateTo
+        dateTo.disableProperty().bind(dateFrom.valueProperty().isNull());
+
+        // disable dates from past
+        dateTo.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate d = dateFrom.getValue();
+                setDisable(empty || date.compareTo(d) <= 0 );
+            }
+        });
+
 
     }
 
