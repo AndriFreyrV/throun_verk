@@ -26,6 +26,8 @@ public class bookingController implements Initializable {
     @FXML
     private ListView<FlightMock> flightsList;
     @FXML
+    private ListView<HotelMock> hotelsList;
+    @FXML
     private ListView<String> cartList; // var ListView<FlightMock>
     @FXML
     private Button orderBtn;
@@ -36,7 +38,9 @@ public class bookingController implements Initializable {
 
     private ObservableList<FlightMock> flights;
     //private ObservableList<FlightMock> flightsSelected; // selected flights
-    private ObservableList<String> flightsSelected; // selected flights
+    private ObservableList<String> objectsSelected; // selected flights
+
+    private ObservableList<HotelMock> hotels;
 
     private CombinedSearch cSearch;
 
@@ -52,8 +56,8 @@ public class bookingController implements Initializable {
         cartMap = new HashMap<>();
 
 
-        flightsSelected = FXCollections.observableArrayList();
-        cartList.setItems(flightsSelected);
+        objectsSelected = FXCollections.observableArrayList();
+        cartList.setItems(objectsSelected);
 
 
         // þessi kóði var áður í mainController, hreinna að hafa þetta hér.
@@ -73,14 +77,17 @@ public class bookingController implements Initializable {
 
     }
 
-    public void setcSearch(CombinedSearch cSearch) {
-        this.cSearch = cSearch;
-    }
 
     public void setFlightsList(ObservableList<FlightMock> fList) {
         this.flights = fList;
         flightsList.setItems(this.flights);
     }
+
+    public void setHotelsList(ObservableList<HotelMock> hList){
+        this.hotels = hList;
+        hotelsList.setItems(this.hotels);
+    }
+
     public void setNPersons(int n){
         this.nPersons = n;
     }
@@ -93,39 +100,65 @@ public class bookingController implements Initializable {
         cartMap.put(flightSelected.toString(), flightSelected);
         int idx = flightsList.getSelectionModel().getSelectedIndex();
         System.out.println(String.format("%s - %d",flightSelected,idx));
-        flightsSelected.add(flightSelected.toString());
+        objectsSelected.add(flightSelected.toString());
         flights.remove(idx);
 
     }
-    public void removeFlightAction(ActionEvent e){
-        String fOut = cartList.getSelectionModel().getSelectedItem();
+
+
+    public void selectHotelAction(ActionEvent e) {
+        HotelMock hotelSelected = hotelsList.getSelectionModel().getSelectedItem();
+        cartMap.put(hotelSelected.toString(), hotelSelected);
+        int idx = hotelsList.getSelectionModel().getSelectedIndex();
+        System.out.println(String.format("%s - %d",hotelSelected,idx));
+        objectsSelected.add(hotelSelected.toString());
+
+        hotels.remove(idx);
+    }
+
+
+    public void removeCartAction(ActionEvent e){
+        String key = cartList.getSelectionModel().getSelectedItem();
         int idx = cartList.getSelectionModel().getSelectedIndex();
         //flights.add(fOut);
-        System.out.println(cartMap.get(fOut.getClass()));
+        //System.out.println(cartMap.get(objOut.getClass()));
 
-        flights.add((FlightMock) cartMap.get(fOut));
-        flightsSelected.remove(idx);
+        Object objOut = cartMap.get(key);
+        System.out.println(objOut.getClass());
+
+        if(objOut instanceof FlightMock){
+            System.out.println("flight remove");
+            flights.add((FlightMock) cartMap.get(key));
+            objectsSelected.remove(idx);
+        }
+        else if(objOut instanceof HotelMock){
+            System.out.println("hotel remove");
+            hotels.add((HotelMock)cartMap.get(key));
+            objectsSelected.remove(idx);
+        }
+
+
+
     }
 
     public void orderAction(ActionEvent e){
-        for(String fl:flightsSelected){
+        for(String s:objectsSelected){
 
-            /*
-            if (cartMap.get(fl) instanceof FlightMock) {
-                // kóði til að bóka flightMock svipað og hér undir
+            if(cartMap.get(s) instanceof FlightMock) {
+                FlightMock fl = (FlightMock) (cartMap.get(s));
+                System.out.println(String.format("State before order placed:\n %s", fl));
+                fl.book(this.nPersons); // book flight, should decrease availability
+                System.out.println(String.format("State after order placed:\n %s", fl));
             }
-            else if(cartMap.get(fl) instanceof HotelMock) {
-                // kastað yfir í hotelMock ofl.
+
+            else if(cartMap.get(s) instanceof HotelMock){
+                HotelMock h = (HotelMock)(cartMap.get(s));
+                System.out.println(String.format("State before order placed: \n%s", h));
+                h.book(this.nPersons);
+                System.out.println(String.format("State after order placed: \n%s", h));
             }
-
-             */
-
-
-            System.out.println(String.format("State before order placed:\n %s", fl));
-            FlightMock flObj = (FlightMock)(cartMap.get(fl));
-            flObj.book(this.nPersons); // book flight, should decrease availability
-            System.out.println(String.format("State after order placed:\n %s", fl));
         }
+
         // veit ekki hvernig þetta er gert öðruvísi
         Stage stage = (Stage) orderBtn.getScene().getWindow();
         stage.close();

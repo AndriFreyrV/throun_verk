@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import mock.FlightMock;
 import mock.FlightSearchMock;
 import mock.HotelMock;
+import mock.HotelSearchMock;
 
 import java.io.IOException;
 import java.net.URL;
@@ -99,4 +100,117 @@ public class MainController implements Initializable {
                 FXCollections.observableArrayList(num_vals);
         howMany.setItems(vals_ls);
     }
+
+
+    public void searchAction(ActionEvent e) {
+        // þarf að handle-a empty field í dateTo
+
+        ObservableList<FlightMock> fListOut;
+        fListOut = FXCollections.observableArrayList(); // list of bookable flights
+
+        ObservableList<HotelMock> hListOut;
+        hListOut = FXCollections.observableArrayList(); // list of bookable hotels
+
+        //boolean findFlight, boolean findHotel, boolean findDayTour, boolean findRoundTripFlight, String from, String to, String d, int n
+        CombinedSearch CSearch = new CombinedSearch(
+                flightRadio.isSelected(),
+                hotelRadio.isSelected(),
+                dayTripRadio.isSelected(),
+                roundTripRadio.isSelected(),
+                locationFrom.getText(),
+                locationTo.getText(),
+                howMany.getValue()
+        );
+
+
+        if(CSearch.isFindRoundTripFlight()){
+            if(locationFrom.getText().equals("") || locationTo.getText().equals("") || dateTo.getValue() == null || dateFrom.getValue() == null){
+                System.out.println("...debug...");
+                errorLabel.setText("To search for round trip you need locationFrom, locationTo and dateTo, dateFrom");
+                return;
+            }
+
+            CSearch.setDateFrom(dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            CSearch.setDateTo(dateTo.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            errorLabel.setText("");// clean error message
+
+
+            FlightSearchRound flightRound = CSearch.flightSearchRound();
+            FlightSearchMock flightSearchTo = flightRound.getFlightTo();
+            FlightSearchMock flightSearchBack = flightRound.getFlightBack();
+
+            ArrayList<FlightMock> flightsTo = flightSearchTo.Search();
+            for(FlightMock fl:flightsTo){
+                fListOut.add(fl);
+            }
+
+            ArrayList<FlightMock> flightsBack = flightSearchBack.Search();
+            for(FlightMock fl:flightsBack){
+                fListOut.add(fl);
+            }
+        }
+
+        else if(CSearch.isFindFlight()){
+            if(locationFrom.getText().equals("") || locationTo.getText().equals("") || dateFrom.getValue() == null ) {
+                errorLabel.setText("To search for one way trip you need locationFrom, locationTo and dateFrom");
+                return;
+            }
+            CSearch.setDateFrom(dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            errorLabel.setText("");// clean error label
+
+            FlightSearchMock fSearch = CSearch.flightSearch();
+            ArrayList<FlightMock> flightsOut = fSearch.Search();
+
+            for(FlightMock fl:flightsOut){
+                fListOut.add(fl);
+            }
+        }
+
+        if(CSearch.isFindHotel()){
+            System.out.println("ok search hotel");
+            if(locationTo.equals("") || dateFrom.getValue() == null || dateTo.getValue() == null){
+                errorLabel.setText("To search for hotel the fields locationTo, dateFrom and dateTo need to be filled");
+                return;
+            }
+            CSearch.setDateFrom(dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            CSearch.setDateTo(dateTo.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            errorLabel.setText("");// clean error message
+
+            HotelSearchMock hSearch = CSearch.hotelSearch();
+            ArrayList<HotelMock> hotelsOut = hSearch.Search();
+
+            for(HotelMock h: hotelsOut){
+                hListOut.add(h);
+            }
+
+
+
+
+        }
+
+
+
+        // load booking Controller with results from search
+        Parent root;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("booking.fxml"));
+            root = loader.load();
+            bookingController bc = loader.getController();
+            bc.setFlightsList(fListOut);
+            bc.setHotelsList(hListOut);
+            bc.setNPersons(howMany.getValue());
+
+            Stage stage = new Stage();
+            stage.setTitle("Booking window");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        }
+        catch (IOException err) {
+            err.printStackTrace();
+        }
+
+    }
+
+
 }

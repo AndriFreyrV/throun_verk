@@ -1,6 +1,7 @@
 package sample;
 
 import mock.FlightSearchMock;
+import mock.HotelSearchMock;
 
 public class CombinedSearch {
     private boolean findFlight;
@@ -25,6 +26,8 @@ public class CombinedSearch {
     public boolean isFindRoundTripFlight() {
         return findRoundTripFlight;
     }
+
+    public boolean isFindHotel() { return findHotel; }
 
     public CombinedSearch(boolean fF, boolean fH, boolean fD, boolean fRT, String f, String t,
                           int n){
@@ -54,6 +57,11 @@ public class CombinedSearch {
         FlightSearchMock f1 = new FlightSearchMock(this.from, this.to, this.dateFrom, this.nPersons);
         FlightSearchMock f2 = new FlightSearchMock(this.to, this.from, this.dateTo, this.nPersons);
         return new FlightSearchRound(f1, f2);
+    }
+
+
+    public HotelSearchMock hotelSearch(){
+        return new HotelSearchMock(this.to,this.dateFrom,this.dateTo,this.nPersons);
     }
 
     public String toString() {
