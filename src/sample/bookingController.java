@@ -1,6 +1,11 @@
 package sample;
 
+import hotels.Hotel;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +22,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import javafx.scene.control.Label;
 
 
 
@@ -26,7 +32,7 @@ public class bookingController implements Initializable {
     @FXML
     private ListView<FlightMock> flightsList;
     @FXML
-    private ListView<HotelMock> hotelsList;
+    private ListView<Hotel> hotelsList;
     @FXML
     private ListView<String> cartList; // var ListView<FlightMock>
     @FXML
@@ -35,16 +41,23 @@ public class bookingController implements Initializable {
     private Button RemoveBtn;
     @FXML
     private Button addFlightBtn;
+    @FXML
+    private Label costLabel;
 
     private ObservableList<FlightMock> flights;
     //private ObservableList<FlightMock> flightsSelected; // selected flights
     private ObservableList<String> objectsSelected; // selected flights
 
-    private ObservableList<HotelMock> hotels;
+    private ObservableList<Hotel> hotels;
 
     private CombinedSearch cSearch;
 
     private int nPersons; // number of individuals to book for
+
+    private int cartPrice; // combined cost of items in cart:
+
+    private SimpleStringProperty cartPriceProp;
+
 
     private HashMap<String, Object> cartMap;
 
@@ -53,6 +66,13 @@ public class bookingController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        cartPrice = 0;
+        cartPriceProp = new SimpleStringProperty();
+
+        cartPriceProp.setValue(String.valueOf(cartPrice));
+
+        costLabel.textProperty().bind(cartPriceProp);
+
         cartMap = new HashMap<>();
 
 
@@ -83,7 +103,7 @@ public class bookingController implements Initializable {
         flightsList.setItems(this.flights);
     }
 
-    public void setHotelsList(ObservableList<HotelMock> hList){
+    public void setHotelsList(ObservableList<Hotel> hList){
         this.hotels = hList;
         hotelsList.setItems(this.hotels);
     }
@@ -98,22 +118,25 @@ public class bookingController implements Initializable {
     public void selectFlightAction(ActionEvent e) {
         FlightMock flightSelected = flightsList.getSelectionModel().getSelectedItem();
         cartMap.put(flightSelected.toString(), flightSelected);
+        cartPrice += flightSelected.getCost()*nPersons;
         int idx = flightsList.getSelectionModel().getSelectedIndex();
         System.out.println(String.format("%s - %d",flightSelected,idx));
         objectsSelected.add(flightSelected.toString());
         flights.remove(idx);
+        cartPriceProp.setValue(String.valueOf(cartPrice));
 
     }
 
 
     public void selectHotelAction(ActionEvent e) {
-        HotelMock hotelSelected = hotelsList.getSelectionModel().getSelectedItem();
+        Hotel hotelSelected = hotelsList.getSelectionModel().getSelectedItem();
+        cartPrice += hotelSelected.getPrice()*nPersons; // book hotel stay for nPersons many individuals
         cartMap.put(hotelSelected.toString(), hotelSelected);
         int idx = hotelsList.getSelectionModel().getSelectedIndex();
         System.out.println(String.format("%s - %d",hotelSelected,idx));
         objectsSelected.add(hotelSelected.toString());
-
         hotels.remove(idx);
+        cartPriceProp.setValue(String.valueOf(cartPrice));
     }
 
 
@@ -131,14 +154,12 @@ public class bookingController implements Initializable {
             flights.add((FlightMock) cartMap.get(key));
             objectsSelected.remove(idx);
         }
-        else if(objOut instanceof HotelMock){
+        else if(objOut instanceof Hotel){
             System.out.println("hotel remove");
-            hotels.add((HotelMock)cartMap.get(key));
+            hotels.add((Hotel)cartMap.get(key));
             objectsSelected.remove(idx);
         }
-
-
-
+        
     }
 
     public void orderAction(ActionEvent e){
@@ -151,6 +172,8 @@ public class bookingController implements Initializable {
                 System.out.println(String.format("State after order placed:\n %s", fl));
             }
 
+
+            // vantar virkni fyrir venjulegan Hotel hlut, vitum ekki alveg hvernig bókun fer fram !!
             else if(cartMap.get(s) instanceof HotelMock){
                 HotelMock h = (HotelMock)(cartMap.get(s));
                 System.out.println(String.format("State before order placed: \n%s", h));

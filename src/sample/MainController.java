@@ -1,5 +1,7 @@
 package sample;
 
+import hotels.Hotel;
+import hotels.HotelSearch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -50,6 +52,9 @@ public class MainController implements Initializable {
     private Label errorLabel;
 
 
+
+
+
     private final Integer[] num_vals = {1,2,3,4,5,6,7,8,9,10};
 
     @Override
@@ -65,7 +70,6 @@ public class MainController implements Initializable {
                 .or((flightsGroup.selectedToggleProperty().isNull())
                     .and(hotelRadio.selectedProperty().not()
                     .and(dayTripRadio.selectedProperty().not()))));
-
          */
         submitButton.disableProperty()
                 .bind(howMany.valueProperty().isNull().or(
@@ -73,7 +77,6 @@ public class MainController implements Initializable {
                                 .and(hotelRadio.selectedProperty().not()
                                         .and(dayTripRadio.selectedProperty().not()))
                 ));
-
 
 
         // have to select dataFrom to select DateTo
@@ -87,7 +90,6 @@ public class MainController implements Initializable {
                 setDisable(empty || date.compareTo(d) <= 0 );
             }
         });
-
 
     }
 
@@ -108,7 +110,7 @@ public class MainController implements Initializable {
         ObservableList<FlightMock> fListOut;
         fListOut = FXCollections.observableArrayList(); // list of bookable flights
 
-        ObservableList<HotelMock> hListOut;
+        ObservableList<Hotel> hListOut;
         hListOut = FXCollections.observableArrayList(); // list of bookable hotels
 
         //boolean findFlight, boolean findHotel, boolean findDayTour, boolean findRoundTripFlight, String from, String to, String d, int n
@@ -179,12 +181,22 @@ public class MainController implements Initializable {
             HotelSearchMock hSearch = CSearch.hotelSearch();
             ArrayList<HotelMock> hotelsOut = hSearch.Search();
 
-            for(HotelMock h: hotelsOut){
+            HotelSearch hSearch1 = new HotelSearch();
+            ArrayList<Hotel> h_list = hSearch1.search(null, null, this.locationTo.getText(), howMany.getValue(), dateFrom.getValue(),dateTo.getValue());
+
+            System.out.println("List of hotels from H group");
+            for(Hotel h: h_list){
+                System.out.println(h);
                 hListOut.add(h);
             }
 
 
+            /*
+            for(HotelMock h: hotelsOut){
+                hListOut.add(h);
+            }
 
+             */
 
         }
 
@@ -209,8 +221,5 @@ public class MainController implements Initializable {
         catch (IOException err) {
             err.printStackTrace();
         }
-
     }
-
-
 }

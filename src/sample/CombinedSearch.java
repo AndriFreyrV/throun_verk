@@ -69,5 +69,4 @@ public class CombinedSearch {
         return "blaaa";
     }
 
-
 }

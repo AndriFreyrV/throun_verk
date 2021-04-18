@@ -36,7 +36,7 @@ public class FlightSearchMock {
 
         int n_flights = r.nextInt(8); // at most 5 flights
         for(int i = 0;i<n_flights;i++){
-            FlightMock flight = new FlightMock(this.LocationFrom, this.LocationTo, this.date, r.nextInt(30));
+            FlightMock flight = new FlightMock(this.LocationFrom, this.LocationTo, this.date, r.nextInt(30), r.nextInt(20000)+10000);
             flightsOut.add(flight);
         }
         return flightsOut;
