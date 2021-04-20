@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="469.0" prefWidth="714.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.BookingConfirmedController">
+   <children>
+      <ListView fx:id="flightsList" layoutX="137.0" layoutY="142.0" prefHeight="200.0" prefWidth="200.0" />
+      <ListView fx:id="hotelsList" layoutX="427.0" layoutY="142.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label layoutX="137.0" layoutY="114.0" prefHeight="17.0" prefWidth="109.0" text="Flights booked">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label layoutX="427.0" layoutY="114.0" prefHeight="17.0" prefWidth="84.0" text="Hotels Booked">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <Label fx:id="confirmLabel" layoutX="137.0" layoutY="32.0" prefHeight="17.0" prefWidth="496.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="costLabel" layoutX="137.0" layoutY="66.0" prefHeight="17.0" prefWidth="200.0" />
+      <Label fx:id="labelNPersons" layoutX="137.0" layoutY="89.0" prefHeight="17.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>

@@ -1,7 +1,10 @@
 package sample;
 
+import Flight.FlightSearch;
 import mock.FlightSearchMock;
 import mock.HotelSearchMock;
+
+import java.util.Date;
 
 public class CombinedSearch {
     private boolean findFlight;
@@ -10,16 +13,16 @@ public class CombinedSearch {
     private boolean findRoundTripFlight;
     private String from;
     private String to;
-    private String dateFrom;
-    private String dateTo; // for one way flight or only searching day tour we dont need day
+    private Date dateFrom;
+    private Date dateTo; // for one way flight or only searching day tour we dont need day
     private int nPersons;
 
 
-    public void setDateFrom(String dateFrom) {
+    public void setDateFrom(Date dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public void setDateTo(String dateTo) {
+    public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
     }
 
@@ -48,25 +51,24 @@ public class CombinedSearch {
 
     // verður skipt út fyrir proper klasa
     // one way flight search
-    public FlightSearchMock flightSearch(){
-        return new FlightSearchMock(this.from, this.to, this.dateFrom, this.nPersons);
+    public FlightSearch flightSearch(){
+        return new FlightSearch(this.from, this.to, this.dateFrom, this.nPersons);
     }
 
     // hér er round trip, búum til tvo instance af flightSearch
     public FlightSearchRound flightSearchRound(){
-        FlightSearchMock f1 = new FlightSearchMock(this.from, this.to, this.dateFrom, this.nPersons);
-        FlightSearchMock f2 = new FlightSearchMock(this.to, this.from, this.dateTo, this.nPersons);
+        FlightSearch f1 = new FlightSearch(this.from, this.to, this.dateFrom, this.nPersons);
+        FlightSearch f2 = new FlightSearch(this.to, this.from, this.dateTo, this.nPersons);
         return new FlightSearchRound(f1, f2);
     }
 
-
+    /*
     public HotelSearchMock hotelSearch(){
         return new HotelSearchMock(this.to,this.dateFrom,this.dateTo,this.nPersons);
     }
+    */
 
-    public String toString() {
-        // núna bara notað fyrir staðfestingu á að hlutur sé til
-        return "blaaa";
-    }
+
+
 
 }

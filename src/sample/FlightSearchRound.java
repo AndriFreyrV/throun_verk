@@ -1,20 +1,20 @@
 package sample;
 
-import mock.FlightSearchMock;
+import Flight.FlightSearch;
 
 public class FlightSearchRound {
-    public FlightSearchMock getFlightTo() {
+    public FlightSearch getFlightTo() {
         return flightTo;
     }
 
-    public FlightSearchMock getFlightBack() {
+    public FlightSearch getFlightBack() {
         return flightBack;
     }
 
-    private FlightSearchMock flightTo;
-    private FlightSearchMock flightBack;
+    private FlightSearch flightTo;
+    private FlightSearch flightBack;
 
-    public FlightSearchRound(FlightSearchMock f1, FlightSearchMock f2){
+    public FlightSearchRound(FlightSearch f1, FlightSearch f2){
         this.flightTo = f1;
         this.flightBack = f2;
     }

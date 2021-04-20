@@ -1,5 +1,7 @@
 package sample;
 
+import Flight.Flight;
+import Flight.FlightSearch;
 import hotels.Hotel;
 import hotels.HotelSearch;
 import javafx.collections.FXCollections;
@@ -19,10 +21,13 @@ import mock.HotelSearchMock;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -93,6 +98,10 @@ public class MainController implements Initializable {
 
     }
 
+    public Date convertToDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
 
     /**
      * Sets values to list of number of persons
@@ -104,14 +113,17 @@ public class MainController implements Initializable {
     }
 
 
-    public void searchAction(ActionEvent e) {
+    public void searchAction(ActionEvent e) throws SQLException, ParseException {
         // þarf að handle-a empty field í dateTo
 
-        ObservableList<FlightMock> fListOut;
+        ObservableList<Flight> fListOut;
         fListOut = FXCollections.observableArrayList(); // list of bookable flights
 
         ObservableList<Hotel> hListOut;
         hListOut = FXCollections.observableArrayList(); // list of bookable hotels
+
+        LocalDate dateFromOut = LocalDate.now(); // default
+        LocalDate dateToOut = LocalDate.now(); // default
 
         //boolean findFlight, boolean findHotel, boolean findDayTour, boolean findRoundTripFlight, String from, String to, String d, int n
         CombinedSearch CSearch = new CombinedSearch(
@@ -132,22 +144,23 @@ public class MainController implements Initializable {
                 return;
             }
 
-            CSearch.setDateFrom(dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            CSearch.setDateTo(dateTo.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            CSearch.setDateFrom(convertToDate(dateFrom.getValue()));
+            CSearch.setDateTo(convertToDate(dateTo.getValue()));
+
+            //CSearch.setDateTo(dateTo.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             errorLabel.setText("");// clean error message
 
-
             FlightSearchRound flightRound = CSearch.flightSearchRound();
-            FlightSearchMock flightSearchTo = flightRound.getFlightTo();
-            FlightSearchMock flightSearchBack = flightRound.getFlightBack();
+            FlightSearch flightSearchTo = flightRound.getFlightTo();
+            FlightSearch flightSearchBack = flightRound.getFlightBack();
 
-            ArrayList<FlightMock> flightsTo = flightSearchTo.Search();
-            for(FlightMock fl:flightsTo){
+            List<Flight> flightsTo = flightSearchTo.search();
+            for(Flight fl:flightsTo){
                 fListOut.add(fl);
             }
 
-            ArrayList<FlightMock> flightsBack = flightSearchBack.Search();
-            for(FlightMock fl:flightsBack){
+            List<Flight> flightsBack = flightSearchBack.search();
+            for(Flight fl:flightsBack){
                 fListOut.add(fl);
             }
         }
@@ -157,13 +170,13 @@ public class MainController implements Initializable {
                 errorLabel.setText("To search for one way trip you need locationFrom, locationTo and dateFrom");
                 return;
             }
-            CSearch.setDateFrom(dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            CSearch.setDateFrom(convertToDate(dateFrom.getValue()));
             errorLabel.setText("");// clean error label
 
-            FlightSearchMock fSearch = CSearch.flightSearch();
-            ArrayList<FlightMock> flightsOut = fSearch.Search();
+            FlightSearch fSearch = CSearch.flightSearch();
+            List<Flight> flightsOut = fSearch.search();
 
-            for(FlightMock fl:flightsOut){
+            for(Flight fl:flightsOut){
                 fListOut.add(fl);
             }
         }
@@ -174,12 +187,13 @@ public class MainController implements Initializable {
                 errorLabel.setText("To search for hotel the fields locationTo, dateFrom and dateTo need to be filled");
                 return;
             }
-            CSearch.setDateFrom(dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            CSearch.setDateTo(dateTo.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            CSearch.setDateFrom(convertToDate(dateFrom.getValue()));
+            CSearch.setDateTo(convertToDate(dateTo.getValue()));
+            dateFromOut = dateFrom.getValue();
+            dateToOut = dateTo.getValue();
+
             errorLabel.setText("");// clean error message
 
-            HotelSearchMock hSearch = CSearch.hotelSearch();
-            ArrayList<HotelMock> hotelsOut = hSearch.Search();
 
             HotelSearch hSearch1 = new HotelSearch();
             ArrayList<Hotel> h_list = hSearch1.search(null, null, this.locationTo.getText(), howMany.getValue(), dateFrom.getValue(),dateTo.getValue());
@@ -190,18 +204,7 @@ public class MainController implements Initializable {
                 hListOut.add(h);
             }
 
-
-            /*
-            for(HotelMock h: hotelsOut){
-                hListOut.add(h);
-            }
-
-             */
-
         }
-
-
-
         // load booking Controller with results from search
         Parent root;
         try {
@@ -211,6 +214,7 @@ public class MainController implements Initializable {
             bc.setFlightsList(fListOut);
             bc.setHotelsList(hListOut);
             bc.setNPersons(howMany.getValue());
+            bc.setDates(dateFromOut, dateToOut);
 
             Stage stage = new Stage();
             stage.setTitle("Booking window");
