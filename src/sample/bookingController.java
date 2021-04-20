@@ -1,5 +1,7 @@
 package sample;
 
+import DayTours.BookingControllerTour;
+import DayTours.Tour;
 import Flight.Flight;
 import hotels.Hotel;
 import javafx.application.Platform;
@@ -44,6 +46,8 @@ public class bookingController implements Initializable {
     @FXML
     private ListView<Hotel> hotelsList;
     @FXML
+    private ListView<Tour> toursList;
+    @FXML
     private ListView<String> cartList; // var ListView<FlightMock>
     @FXML
     private Button orderBtn;
@@ -59,6 +63,8 @@ public class bookingController implements Initializable {
     private ObservableList<String> objectsSelected; // selected flights
 
     private ObservableList<Hotel> hotels;
+
+    private ObservableList<Tour> tours;
 
     private CombinedSearch cSearch;
 
@@ -77,6 +83,11 @@ public class bookingController implements Initializable {
     public void setDates(LocalDate dF, LocalDate dT){
         this.dateFrom = dF;
         this.dateTo = dT;
+    }
+
+    public void setTours(ObservableList<Tour> t){
+        this.tours = t;
+        this.toursList.setItems(this.tours);
     }
 
 
@@ -114,9 +125,6 @@ public class bookingController implements Initializable {
         this.nPersons = n;
     }
 
-
-
-
     public void selectFlightAction(ActionEvent e) {
         Flight flightSelected = flightsList.getSelectionModel().getSelectedItem();
         cartMap.put(flightSelected.toString(), flightSelected);
@@ -128,7 +136,6 @@ public class bookingController implements Initializable {
         cartPriceProp.setValue(String.valueOf(cartPrice));
 
     }
-
 
     public void selectHotelAction(ActionEvent e) {
         Hotel hotelSelected = hotelsList.getSelectionModel().getSelectedItem();
@@ -142,6 +149,17 @@ public class bookingController implements Initializable {
         cartPriceProp.setValue(String.valueOf(cartPrice));
     }
 
+    public void selectTourAction(ActionEvent e){
+        Tour tourSelected = toursList.getSelectionModel().getSelectedItem();
+        cartPrice += tourSelected.getPrice()*nPersons;
+        cartMap.put(tourSelected.toString(), tourSelected);
+        int idx = toursList.getSelectionModel().getSelectedIndex();
+        objectsSelected.add(tourSelected.toString());
+        tours.remove(idx);
+        cartPriceProp.setValue(String.valueOf(cartPrice));
+
+    }
+
 
     public void removeCartAction(ActionEvent e){
         String key = cartList.getSelectionModel().getSelectedItem();
@@ -153,45 +171,58 @@ public class bookingController implements Initializable {
         System.out.println(objOut.getClass());
 
         if(objOut instanceof Flight){
-            System.out.println("flight remove");
             flights.add((Flight) cartMap.get(key));
+            Flight flightDropped = (Flight)cartMap.get(key);
             objectsSelected.remove(idx);
+            cartPrice -= flightDropped.getCost()*nPersons;
         }
         else if(objOut instanceof Hotel){
-            System.out.println("hotel remove");
             hotels.add((Hotel)cartMap.get(key));
+            Hotel hotelDropped = (Hotel)cartMap.get(key);
+            objectsSelected.remove(idx);
+            cartPrice -= hotelDropped.getPrice()*nPersons;
+        }
+        else if(objOut instanceof Tour){
+            tours.add((Tour)cartMap.get(key));
+            Tour tourDropped = (Tour)cartMap.get(key);
+            cartPrice -= tourDropped.getPrice()*nPersons;
             objectsSelected.remove(idx);
         }
+        cartPriceProp.setValue(String.valueOf(cartPrice));
 
     }
 
     public void orderAction(ActionEvent e){
         ObservableList<Flight> flightsOut = FXCollections.observableArrayList();
         ObservableList<Hotel> hotelsOut = FXCollections.observableArrayList();
-
+        ObservableList<Tour> toursOut = FXCollections.observableArrayList();
 
         for(String s:objectsSelected){
-
             if(cartMap.get(s) instanceof Flight) {
                 Flight fl = (Flight) (cartMap.get(s));
-                System.out.println(String.format("State before order placed:\n %s", fl));
+                System.out.println(String.format("State before order placed:\n %s", fl.toStr()));
                 try {
                     fl.book(this.nPersons); // book flight, should decrease availability
                     flightsOut.add(fl);
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 }
-                System.out.println(String.format("State after order placed:\n %s", fl));
+                System.out.println(String.format("State after order placed:\n %s", fl.toStr()));
             }
-
             // vantar virkni fyrir venjulegan Hotel hlut, vitum ekki alveg hvernig bókun fer fram !!
             else if(cartMap.get(s) instanceof Hotel){
                 Hotel h = (Hotel)(cartMap.get(s));
                 hotelsOut.add(h);
-
                 //System.out.println(String.format("State before order placed: \n%s", h));
                 //h.book(this.nPersons);
                 //System.out.println(String.format("State after order placed: \n%s", h));
+            }
+            else if(cartMap.get(s) instanceof Tour){
+                Tour t = (Tour)(cartMap.get(s));
+                // bóka
+                BookingControllerTour bck = new BookingControllerTour();
+                bck.book(t.getTripID() ,this.nPersons); // place order
+                toursOut.add(t);
             }
         }
 
@@ -202,8 +233,7 @@ public class bookingController implements Initializable {
             BookingConfirmedController bc = loader.getController();
             bc.setFlights(flightsOut);
             bc.setHotels(hotelsOut);
-
-
+            bc.setTours(toursOut);
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             String timeOrder = dtf.format(now);

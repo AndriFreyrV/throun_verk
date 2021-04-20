@@ -46,13 +46,13 @@ public class Flight {
 	public Date getArrivalTime( ) { return arrivalTime; }
 	public void setArrivalTime(Date newDate ) { arrivalTime = newDate; }
 	
-	public String toString() {
-		return String.format("id: %d, From: %s, To: %s, Departure time %tc, arrives at %tc , Number of Seats: %d\n", id,  currentLocation, destination, departureTime, arrivalTime, seats);
 
+	public String toStr() {
+		return String.format("id: %d, From: %s, To: %s, Departure time %tc, arrives at %tc , Number of Seats: %d\n", id,  currentLocation, destination, departureTime, arrivalTime, seats);
 	}
 
-	public String toStr(){
-		return String.format("From:%s - To: %s -Price: %d", currentLocation, destination, cost);
+	public String toString(){
+		return String.format("From: %s - To: %s - Time: %tc - Price: %d", currentLocation, destination, departureTime, cost);
 	}
 	
 	public void book(int n) throws  java.sql.SQLException{

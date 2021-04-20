@@ -1,5 +1,8 @@
 package sample;
 
+import DayTours.SearchController;
+import DayTours.SearchModel;
+import DayTours.Tour;
 import Flight.Flight;
 import Flight.FlightSearch;
 import hotels.Hotel;
@@ -122,6 +125,9 @@ public class MainController implements Initializable {
         ObservableList<Hotel> hListOut;
         hListOut = FXCollections.observableArrayList(); // list of bookable hotels
 
+        ObservableList<Tour> tListOut;
+        tListOut= FXCollections.observableArrayList(); // list of bookable hotels
+
         LocalDate dateFromOut = LocalDate.now(); // default
         LocalDate dateToOut = LocalDate.now(); // default
 
@@ -147,7 +153,6 @@ public class MainController implements Initializable {
             CSearch.setDateFrom(convertToDate(dateFrom.getValue()));
             CSearch.setDateTo(convertToDate(dateTo.getValue()));
 
-            //CSearch.setDateTo(dateTo.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             errorLabel.setText("");// clean error message
 
             FlightSearchRound flightRound = CSearch.flightSearchRound();
@@ -182,7 +187,6 @@ public class MainController implements Initializable {
         }
 
         if(CSearch.isFindHotel()){
-            System.out.println("ok search hotel");
             if(locationTo.equals("") || dateFrom.getValue() == null || dateTo.getValue() == null){
                 errorLabel.setText("To search for hotel the fields locationTo, dateFrom and dateTo need to be filled");
                 return;
@@ -205,6 +209,34 @@ public class MainController implements Initializable {
             }
 
         }
+
+
+        if(dayTripRadio.isSelected()){
+            System.out.println("ok search hotel");
+            if(locationTo.equals("") || dateFrom.getValue() == null || dateTo.getValue() == null){
+                errorLabel.setText("To search for DayTours the fields locationTo, dateFrom and dateTo need to be filled");
+                return;
+            }
+            CSearch.setDateFrom(convertToDate(dateFrom.getValue()));
+            CSearch.setDateTo(convertToDate(dateTo.getValue()));
+
+            errorLabel.setText("");// clean error message
+
+
+            SearchModel dayTourSearch = new SearchModel();
+            dayTourSearch.setFromDate(dateFrom.getValue());
+            dayTourSearch.setToDate(dateTo.getValue());
+            dayTourSearch.setPersons(howMany.getValue());
+
+            SearchController sc = new SearchController();
+            tListOut = sc.searchTour(dayTourSearch);
+            for(Tour t: tListOut){
+                System.out.println(t);
+            }
+
+        }
+
+
         // load booking Controller with results from search
         Parent root;
         try {
@@ -213,6 +245,7 @@ public class MainController implements Initializable {
             bookingController bc = loader.getController();
             bc.setFlightsList(fListOut);
             bc.setHotelsList(hListOut);
+            bc.setTours(tListOut);
             bc.setNPersons(howMany.getValue());
             bc.setDates(dateFromOut, dateToOut);
 

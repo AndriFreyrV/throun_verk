@@ -1,5 +1,6 @@
 package sample;
 
+import DayTours.Tour;
 import Flight.Flight;
 import hotels.Hotel;
 import javafx.collections.ObservableList;
@@ -18,6 +19,8 @@ public class BookingConfirmedController implements Initializable {
     @FXML
     private ListView<Hotel> hotelsList;
     @FXML
+    private ListView<Tour> toursList;
+    @FXML
     private Label confirmLabel;
     @FXML
     private Label costLabel;
@@ -27,6 +30,7 @@ public class BookingConfirmedController implements Initializable {
 
     private ObservableList<Hotel> hotels;
     private ObservableList<Flight> flights;
+    private ObservableList<Tour> tours;
 
     public void setFlights(ObservableList<Flight> flights) {
         this.flights = flights;
@@ -36,6 +40,10 @@ public class BookingConfirmedController implements Initializable {
     public void setHotels(ObservableList<Hotel> hotels) {
         this.hotels = hotels;
         this.hotelsList.setItems(this.hotels);
+    }
+    public void setTours(ObservableList<Tour> tours){
+        this.tours = tours;
+        this.toursList.setItems(this.tours);
     }
 
     public void writeLabel(String s){
