@@ -52,7 +52,7 @@ public class Flight {
 	}
 
 	public String toString(){
-		return String.format("From: %s - To: %s - Time: %tc - Price: %d", currentLocation, destination, departureTime, cost);
+		return String.format("From: %s - To: %s - Time: %tc - Price: %d - Number of Seats: %d", currentLocation, destination, departureTime, cost, seats);
 	}
 	
 	public void book(int n) throws  java.sql.SQLException{

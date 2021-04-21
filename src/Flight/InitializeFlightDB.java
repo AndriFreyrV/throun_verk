@@ -58,8 +58,9 @@ public class InitializeFlightDB {
 		ifdb.createFlightInDB("Reykjavík", "Akureyri", "Sun Apr 11 16:00:00 GMT 2021");
 		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Tue Apr 13 14:00:00 GMT 2021");
 		ifdb.createFlightInDB("Reykjavík", "Akureyri", "Tue Apr 13 16:00:00 GMT 2021");
-		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Thu Apr 15 14:00:00 GMT 2021");
-		ifdb.createFlightInDB("Reykjavík", "Akureyri", "Thu Apr 15 16:00:00 GMT 2021");
+		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Thu Apr 13 14:00:00 GMT 2021");
+		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Thu Apr 16 16:00:00 GMT 2021");
+		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Thu Apr 16 16:00:00 GMT 2021");
 		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Sun Apr 18 14:00:00 GMT 2021");
 		ifdb.createFlightInDB("Reykjavík", "Akureyri", "Sun Apr 18 16:00:00 GMT 2021");
 		ifdb.createFlightInDB("Akureyri", "Reykjavík", "Tue Apr 20 14:00:00 GMT 2021");

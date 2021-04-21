@@ -70,15 +70,7 @@ public class MainController implements Initializable {
 
         addNums();
 
-        /*
-        submitButton.disableProperty()
-                .bind(locationFrom.textProperty().isEmpty().
-                        or(dateFrom.valueProperty().isNull())
-                .or(howMany.valueProperty().isNull())
-                .or((flightsGroup.selectedToggleProperty().isNull())
-                    .and(hotelRadio.selectedProperty().not()
-                    .and(dayTripRadio.selectedProperty().not()))));
-         */
+
         submitButton.disableProperty()
                 .bind(howMany.valueProperty().isNull().or(
                         (flightsGroup.selectedToggleProperty().isNull())
@@ -198,7 +190,6 @@ public class MainController implements Initializable {
 
             errorLabel.setText("");// clean error message
 
-
             HotelSearch hSearch1 = new HotelSearch();
             ArrayList<Hotel> h_list = hSearch1.search(null, null, this.locationTo.getText(), howMany.getValue(), dateFrom.getValue(),dateTo.getValue());
 
@@ -212,20 +203,24 @@ public class MainController implements Initializable {
 
 
         if(dayTripRadio.isSelected()){
-            System.out.println("ok search hotel");
-            if(locationTo.equals("") || dateFrom.getValue() == null || dateTo.getValue() == null){
-                errorLabel.setText("To search for DayTours the fields locationTo, dateFrom and dateTo need to be filled");
+            if(locationTo.equals("") || dateFrom.getValue() == null){
+                errorLabel.setText("To search for DayTours the fields locationTo and dateFrom need to be filled");
                 return;
             }
             CSearch.setDateFrom(convertToDate(dateFrom.getValue()));
-            CSearch.setDateTo(convertToDate(dateTo.getValue()));
 
             errorLabel.setText("");// clean error message
 
-
             SearchModel dayTourSearch = new SearchModel();
             dayTourSearch.setFromDate(dateFrom.getValue());
-            dayTourSearch.setToDate(dateTo.getValue());
+            if(dateTo.getValue() == null){
+                dayTourSearch.setToDate(dateFrom.getValue());
+            }
+            else{
+                dayTourSearch.setToDate(dateTo.getValue());
+                CSearch.setDateTo(convertToDate(dateTo.getValue()));
+            }
+
             dayTourSearch.setPersons(howMany.getValue());
 
             SearchController sc = new SearchController();

@@ -3,6 +3,7 @@ package DayTours;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -28,7 +29,10 @@ public class Tour
     @Override
     public String toString() {
         //String ret = "[Tour: " + this.tripID + "]";
-        return String.format("Name: %s  - Price: %d",this.tourType.getValue().toString(), this.price.getValue());
+        DateTimeFormatter fmt1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter fmt2 = DateTimeFormatter.ofPattern("HH:mm");
+
+        return String.format("Name: %s  - Price: %d - Time: %s %s",this.tourType.getValue().toString(), this.price.getValue(), this.date.getValue().format(fmt1), this.time.getValue().format(fmt2));
     }
 
     public TourType getTourType ()
